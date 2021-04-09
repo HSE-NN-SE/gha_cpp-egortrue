@@ -38,6 +38,7 @@ jobs:
           retention-days: 1
 
   notification:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: send to telegram
