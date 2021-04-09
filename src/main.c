@@ -1,26 +1,53 @@
-﻿#include "list.h"
-#include <stdlib.h>
+﻿#include "stack.h"
 #include <stdio.h>
-#include <time.h>
 
 int main()
 {
+	char brackets[] = "[][[{()}]][][{}][]([])(())()(){}{}{}{}";
 
-	NODE* LIST = NULL;
-	NODE* NUMS = NULL;
-	NODE* LETTERS = NULL;
+	// Push to the stack
+	int i = 0;
+	while (brackets[i])
+		StackPush(brackets[i++]);
 
-	srand(time(0));
-	for (int i = 0; i < 20; i++) LIST = ListAppend(LIST, rand() % 255);
-	ListSeparateNumsAndLetters(LIST, &NUMS, &LETTERS);
+	printf("Orig: %s\n", brackets);
+	printf("Stack: ");
+	StackPrint();
 
-	ListPrint(LIST);
-	ListPrint(NUMS);
-	ListPrint(LETTERS);
+	// This is like a stack but it is common array ><
+	// Closed brackets are contained here
+	char buffer[100] = { 0 }; 
+	int buf_last = 0;
+	while (!StackIsEmpty())
+	{
+		char symbl = StackGet();
+		StackPop();
 
-	ListDestroy(LIST);
-	ListDestroy(NUMS);
-	ListDestroy(LETTERS);
+		if (buf_last == 0 &&  (symbl == '(' ||
+			                   symbl == '[' ||
+			                   symbl == '{'))
+		{
+			printf("\n%c is not closed\n", symbl);
+			break;
+		}
+
+		if (symbl == ')' || symbl == ']' || symbl == '}')
+			buffer[buf_last++] = symbl;
+
+		if (buf_last > 0)
+			if ((symbl == '(' && buffer[buf_last-1] == ')') ||
+				(symbl == '[' && buffer[buf_last-1] == ']') ||
+				(symbl == '{' && buffer[buf_last-1] == '}'))
+				buffer[buf_last--] = 0;
+
+	}
+
+	if (StackIsEmpty() && buf_last == 0)
+		printf("This is right brackets expression\n");
+	else
+		printf("This is wrong brackets expression\n");
+
+	// Free the stack
+	StackDestroy();
 	return 0;
 }
-

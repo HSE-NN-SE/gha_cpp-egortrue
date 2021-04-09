@@ -28,11 +28,11 @@ jobs:
       - uses: ilammy/msvc-dev-cmd@v1
       - name: build
         shell: cmd
-        run: cl /EHsc src/main.c src/list.c /link /out:gha_cpp-beda_s_bashkoi.exe
+        run: cl /EHsc src/main.c src/stack.c /link /out:stack.exe
         
       - name: artifact
         uses: actions/upload-artifact@v2
         with:
           name: my-artifact
-          path: gha_cpp-beda_s_bashkoi.exe
+          path: stack.exe
           retention-days: 1
