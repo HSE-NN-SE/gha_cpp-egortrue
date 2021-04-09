@@ -28,7 +28,7 @@ jobs:
       - uses: ilammy/msvc-dev-cmd@v1
       - name: build
         shell: cmd
-        run: cl /EHsc src/main.c src/dict.c src/interface.c /link /out:gha_cpp-beda_s_bashkoi.exe
+        run: cl /EHsc src/main.c src/list.c /link /out:gha_cpp-beda_s_bashkoi.exe
         
       - name: artifact
         uses: actions/upload-artifact@v2
