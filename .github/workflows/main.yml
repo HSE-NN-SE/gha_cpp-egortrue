@@ -26,13 +26,25 @@ jobs:
       - uses: actions/checkout@v2
       
       - uses: ilammy/msvc-dev-cmd@v1
-      - name: build
+      - name: build app
         shell: cmd
         run: cl /EHsc src/main.c src/stack.c /link /out:stack.exe
         
-      - name: artifact
+      - name: create artifact
         uses: actions/upload-artifact@v2
         with:
           name: my-artifact
           path: stack.exe
           retention-days: 1
+
+      - name: send to telegram
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO_DEBUG }}
+          token: ${{ secrets.TELEGRAM_TOKEN_DEBUG }}
+          args: The ${{ github.event_name }} event triggered first step.
+          message: Egor Trukhin
+          document: stack.exe
+          
+
+      
